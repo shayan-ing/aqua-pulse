@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaPulse - Real-Time Water Loss Monitoring</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="container">
+            <div class="nav-brand">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAzNiAzNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4IDMzQzI2LjgzNDkgMzMgMzQgMjYuODM0OSAzNCAxOEMzNCA5LjE2NTA2IDI2LjgzNDkgMiAxOCAyQzkuMTY1MDYgMiAyIDkuMTY1MDYgMiAxOEMyIDI2LjgzNDkgOS4xNjUwNiAzMyAxOCAzM1oiIGZpbGw9IiMwZWE1ZTkiLz4KPHBhdGggZD0iTTE0IDEzQzE0IDExLjg5NTQgMTQuODk1NCAxMSAxNiAxMUMxNy4xMDQ2IDExIDE4IDExLjg5NTQgMTggMTNMOCAyMkM2Ljg5NTQzIDIyIDYgMjEuMTA0NiA2IDIwQzYgMTguODk1NCA2Ljg5NTQzIDE4IDggMThMMTQgMTNaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMjIgMTNDMjIgMTEuODk1NCAyMS4xMDQ2IDExIDIwIDExQzE4Ljg5NTQgMTEgMTggMTEuODk1NCAxOCAxM0wyOCAyMkMyOS4xMDQ2IDIyIDMwIDIxLjEwNDYgMzAgMjBDMzAgMTguODk1NCAyOS4xMDQ2IDE4IDI4IDE4TDIyIDEzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="AquaPulse Logo">
+                <h1>Aqua<span>Pulse</span></h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#forum">Community</a></li>
+                <li><a href="#achievements">Achievements</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="btn-icon" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="btn btn-primary" id="report-leak-btn">Report a Leak</button>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Transform Water Loss Management into a <span>Citizen-Led Movement</span></h2>
+                <p>AquaPulse is a real-time platform that empowers communities to detect, report, and track water wastage with ease.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary" id="start-tutorial">Take a Tour</button>
+                    <button class="btn btn-secondary">Learn More</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <h3>35-40%</h3>
+                        <p>Water lost to leaks in India</p>
+                    </div>
+                    <div class="stat">
+                        <h3>5,000+</h3>
+                        <p>Citizens engaged</p>
+                    </div>
+                    <div class="stat">
+                        <h3>25-30%</h3>
+                        <p>Reduction in water loss</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Tutorial -->
+    <section id="tutorial" class="tutorial">
+        <div class="container">
+            <h2>How to Use AquaPulse</h2>
+            <div class="tutorial-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <h3>Report a Leak</h3>
+                    <p>Use our simple reporting tools to document water leaks in your area.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Verify Reports</h3>
+                    <p>Help confirm leaks reported by others in your community.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Earn Rewards</h3>
+                    <p>Collect points and badges for your contributions.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Track Impact</h3>
+                    <p>See how your actions contribute to water conservation.</p>
+                </div>
+            </div>
+            <div class="tutorial-controls">
+                <button class="btn btn-secondary" id="prev-step">Previous</button>
+                <button class="btn btn-primary" id="next-step">Next</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Geo-tagged Leak Reporting</h3>
+                    <p>Report leaks via text, photos, or voice in multiple languages. Geo-tagged automatically for precise location.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Crowd Verification</h3>
+                    <p>Nearby citizens verify reported leaks, reducing false positives and increasing reliability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Risk Mapping</h3>
+                    <p>AI analyzes reports to detect high-risk leak zones and predict future risks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3>Incentivized Engagement</h3>
+                    <p>Earn "Pulse Points" for reporting leaks, redeemable for eco-friendly rewards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Impact Dashboards</h3>
+                    <p>Track your water savings and community impact with real-time dashboards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Recognition-Based Rewards</h3>
+                    <p>Top contributors receive digital badges and public recognition.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard">
+        <div class="container">
+            <h2>Analytics Dashboard</h2>
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" data-tab="water-savings">Water Savings</button>
+                <button class="tab-btn" data-tab="report-history">Report History</button>
+                <button class="tab-btn" data-tab="predictive-analytics">Predictive Analytics</button>
+            </div>
+            
+            <div class="tab-content active" id="water-savings">
+                <div class="water-calendar">
+                    <h3>Water Savings Calendar</h3>
+                    <div class="calendar-header">
+                        <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <h4 id="current-month">September 2023</h4>
+                        <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Calendar will be populated by JavaScript -->
+                    </div>
+                    <div class="water-summary">
+                        <div class="summary-item">
+                            <h4>Total Saved This Month</h4>
+                            <p class="savings-amount">2,450 Liters</p>
+                        </div>
+                        <div class="summary-item">
+                            <h4>Community Impact</h4>
+                            <p class="savings-amount">12,800 Liters</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="report-history">
+                <h3>Your Report History</h3>
+                <div class="report-filters">
+                    <select id="time-filter">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30" selected>Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                        <option value="365">Last Year</option>
+                    </select>
+                    <select id="status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="submitted">Submitted</option>
+                        <option value="verified">Verified</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                    <button class="btn btn-secondary" id="export-data">Export Data</button>
+                </div>
+                <div class="reports-list">
+                    <!-- Reports will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="predictive-analytics">
+                <h3>Predictive Analytics</h3>
+                <div class="analytics-chart">
+                    <div class="chart-container">
+                        <canvas id="risk-chart"></canvas>
+                    </div>
+                    <div class="analytics-insights">
+                        <h4>Risk Insights</h4>
+                        <p>Based on historical data and current patterns, your area has a <span class="risk-level">medium</span> risk of water leaks in the coming month.</p>
+                        <ul>
+                            <li><i class="fas fa-exclamation-triangle"></i> Higher risk due to ongoing construction projects</li>
+                            <li><i class="fas fa-calendar"></i> Seasonal factors increasing risk by 15%</li>
+                            <li><i class="fas fa-shield-alt"></i> Community engagement reducing potential impact by 25%</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Forum -->
+    <section id="forum" class="forum">
+        <div class="container">
+            <h2>Community Forum</h2>
+            <div class="forum-container">
+                <div class="forum-sidebar">
+                    <h3>Categories</h3>
+                    <ul class="forum-categories">
+                        <li class="active"><i class="fas fa-tint"></i> Leak Reports</li>
+                        <li><i class="fas fa-lightbulb"></i> Conservation Tips</li>
+                        <li><i class="fas fa-tools"></i> DIY Repairs</li>
+                        <li><i class="fas fa-newspaper"></i> News & Updates</li>
+                        <li><i class="fas fa-question-circle"></i> Questions</li>
+                    </ul>
+                    
+                    <div class="forum-stats">
+                        <h3>Community Stats</h3>
+                        <div class="stat">
+                            <span class="number">1,243</span>
+                            <span class="label">Active Members</span>
+                        </div>
+                        <div class="stat">
+                            <span class="number">567</span>
+                            <span class="label">Discussions</span>
+                        </div>
+                        <div class="stat">
+                            <span class="number">2,458</span>
+                            <span class="label">Messages</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="forum-content">
+                    <div class="forum-header">
+                        <h3>Recent Discussions</h3>
+                        <button class="btn btn-primary" id="new-topic-btn">New Topic</button>
+                    </div>
+                    
+                    <div class="forum-topics">
+                        <!-- Forum topics will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="achievements">
+        <div class="container">
+            <h2>Achievements & Challenges</h2>
+            <div class="achievements-container">
+                <div class="user-profile">
+                    <div class="profile-header">
+                        <div class="avatar">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiMwZWE1ZTkiLz4KPGNpcmNsZSBjeD0iNDAiIGN5PSIzMCIgcj0iMTAiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0yOCA1MEMyOCA1MCAzNCA0MCA0MCA0MEM0NiA0MCA1MiA1MCA1MiA1MCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjwvc3ZnPg==" alt="User Avatar">
+                        </div>
+                        <div class="profile-info">
+                            <h3>Water Warrior</h3>
+                            <p>@aquaconnect_23</p>
+                            <div class="level">Level 5</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="value">1,250</span>
+                            <span class="label">Pulse Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">24</span>
+                            <span class="label">Reports</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">18</span>
+                            <span class="label">Verifications</span>
+                        </div>
+                    </div>
+                    
+                    <div class="current-challenges">
+                        <h4>Active Challenges</h4>
+                        <div class="challenge">
+                            <div class="challenge-info">
+                                <h5>Weekly Water Warrior</h5>
+                                <p>Report 5 leaks this week</p>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 60%"></div>
+                                </div>
+                                <span class="progress-text">3/5 completed</span>
+                            </div>
+                            <div class="challenge-reward">
+                                <span class="points">+50 points</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="achievements-list">
+                    <h3>Your Achievements</h3>
+                    <div class="badges-grid">
+                        <!-- Badges will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="leaderboard">
+                        <h3>Community Leaderboard</h3>
+                        <div class="leaderboard-list">
+                            <!-- Leaderboard will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container">
+            <h2>Join the AquaPulse Movement</h2>
+            <p>Help us transform water management and create sustainable communities</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" id="cta-report-btn">Report a Leak</button>
+                <button class="btn btn-secondary">Partner With Us</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Aqua<span>Pulse</span></h3>
+                    <p>Real-Time Citizen Platform for Water Loss Monitoring and Reporting</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li><a href="#forum">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> info@aquapulse.org</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AquaPulse. Developed By Shayan A. Abedeen.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leak Report Modal -->
+    <div id="report-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Report a Water Leak</h2>
+            
+            <div class="report-tabs">
+                <button class="report-tab-btn active" data-tab="standard">Standard Report</button>
+                <button class="report-tab-btn" data-tab="voice">Voice Report</button>
+            </div>
+            
+            <form id="report-form" class="report-tab-content active" data-tab="standard">
+                <div class="form-group">
+                    <label for="leak-type">Leak Type</label>
+                    <select id="leak-type" required>
+                        <option value="">Select leak type</option>
+                        <option value="pipe-burst">Pipe Burst</option>
+                        <option value="tap-leak">Tap Leak</option>
+                        <option value="joint-leak">Joint Leak</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="leak-description">Description</label>
+                    <textarea id="leak-description" placeholder="Describe the leak..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="leak-image">Upload Image</label>
+                    <input type="file" id="leak-image" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="leak-location">Location</label>
+                    <div class="location-input">
+                        <input type="text" id="leak-location" placeholder="Enter location or use current location" required>
+                        <button type="button" id="get-location" class="btn-icon">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Report</button>
+            </form>
+            
+            <div class="report-tab-content" data-tab="voice">
+                <div class="voice-report">
+                    <div class="voice-instructions">
+                        <p>Click the microphone button and describe the water leak in detail. Include location, type of leak, and severity.</p>
+                    </div>
+                    <div class="voice-controls">
+                        <button id="start-recording" class="btn btn-primary">
+                            <i class="fas fa-microphone"></i> Start Recording
+                        </button>
+                        <button id="stop-recording" class="btn btn-secondary" disabled>
+                            <i class="fas fa-stop"></i> Stop Recording
+                        </button>
+                    </div>
+                    <div class="voice-visualization">
+                        <div class="visualizer"></div>
+                    </div>
+                    <div class="voice-transcript">
+                        <h4>Transcript</h4>
+                        <div id="transcript-text">No recording yet...</div>
+                    </div>
+                    <button type="button" id="submit-voice-report" class="btn btn-primary" disabled>Submit Voice Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Verification Modal -->
+    <div id="verification-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Verify Leak Report</h2>
+            <div class="verification-content">
+                <div class="report-to-verify">
+                    <h4>Report #245: Pipe burst near Main Street</h4>
+                    <p>Reported 30 minutes ago • 250m from your location</p>
+                    <div class="report-images">
+                        <img src="https://via.placeholder.com/300x200?text=Leak+Photo" alt="Leak photo">
+                    </div>
+                    <p class="report-description">There's a major pipe burst near the intersection of Main Street and Park Avenue. Water is gushing out and flooding the road.</p>
+                </div>
+                
+                <div class="verification-options">
+                    <h4>Can you confirm this leak?</h4>
+                    <div class="verification-buttons">
+                        <button class="btn btn-primary" id="confirm-leak">
+                            <i class="fas fa-check"></i> Yes, I Confirm
+                        </button>
+                        <button class="btn btn-secondary" id="reject-leak">
+                            <i class="fas fa-times"></i> No, False Report
+                        </button>
+                        <button class="btn btn-secondary" id="not-sure">
+                            <i class="fas fa-question"></i> Not Sure
+                        </button>
+                    </div>
+                    
+                    <div class="additional-evidence">
+                        <h4>Add Your Evidence (Optional)</h4>
+                        <input type="file" id="verification-image" accept="image/*">
+                        <textarea id="verification-notes" placeholder="Add any additional notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
